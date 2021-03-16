@@ -1,6 +1,4 @@
-const Graph = require('./Graph');
 
-module.exports = function rollup() {
-  const graph = new Graph(['index.js']);
-  graph.build();
-}
+import { Graph }  from'./Graph';
+const graph = new Graph();
+graph.build();

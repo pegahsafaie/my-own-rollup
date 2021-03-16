@@ -2,16 +2,18 @@
   "name": "my-own-rollup",
   "version": "1.0.0",
   "description": "",
-  "main": "build/app.js",
+  "main": "build/rollup.js",
   "scripts": {
     "build": "shx rm -rf build && tsc",
-    "start": "npm run build && node build/app.js"
+    "start": "npm run build && node build/rollup.js"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.14.33",
-    "acorn": "^8.1.0",
+    "acorn": "^8.0.5",
+    "acorn-class-fields": "^1.0.0",
+    "acorn-static-class-features": "^1.0.0",
     "shx": "^0.3.3",
     "typescript": "^4.2.3"
   }
