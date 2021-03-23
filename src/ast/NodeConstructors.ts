@@ -1,6 +1,7 @@
 import { ImportDeclaration } from './ImportDeclaration';
 import { ImportSpecifier } from './ImportSpecifier';
 import { ExpressionStatement } from './ExpressionStatement';
+import { ExportDefaultDeclaration } from './ExportDefaultDeclaration';
 
 import { Node } from './Node';
 
@@ -10,7 +11,6 @@ export const nodeConstructors: {
   /*DoWhileStatement,
 	EmptyStatement,
 	ExportAllDeclaration,
-	ExportDefaultDeclaration,
 	ExportNamedDeclaration,
 	ExportSpecifier,
 	ForInStatement,
@@ -23,6 +23,7 @@ export const nodeConstructors: {
 	ImportDefaultSpecifier,
 	ImportNamespaceSpecifier,
 	...*/
+	ExportDefaultDeclaration,
 	ExpressionStatement,
 	ImportDeclaration,
 	ImportSpecifier,

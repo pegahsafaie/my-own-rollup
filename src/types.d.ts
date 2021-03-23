@@ -3,3 +3,7 @@ interface AcornNode {
 	start: number;
 	type: string;
 }
+
+export interface OutputBundleWithPlaceholders {
+	[fileName: string]: OutputAsset | OutputChunk | FilePlaceholder;
+}

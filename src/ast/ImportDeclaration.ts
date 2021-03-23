@@ -11,4 +11,8 @@ export class ImportDeclaration extends Node {
 	initialise() {
 		this.context.addImport(this);
 	}
+
+	render(magicString: string): string {
+		return magicString.replace(/import .* from \S*.*;/, '');
+	}
 }

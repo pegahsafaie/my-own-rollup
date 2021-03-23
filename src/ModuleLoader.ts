@@ -2,6 +2,7 @@ const fs = require('fs');
 const path = require("path");
 import { Graph } from './Graph';
 import { Module } from './Module';
+import { AcornNode } from './types';
 
 
 export class ModuleLoader {
@@ -15,19 +16,20 @@ export class ModuleLoader {
    * 
    * @param unresolvedId: relative address to resolve the module
    */
-  loadEntryModule(unresolvedId: string) {
-    this.fetchModule(unresolvedId, true);
+  async loadEntryModule(unresolvedId: string): Promise<void> {
+    await this.fetchModule(unresolvedId, true);
   }
 
   /**
    * everything that should be done by fetching a module: 
    * adding that to the graph, start watching that and add the rest of dependencies
    */
-  async fetchModule(id: string, isEntry: boolean) {
+  async fetchModule(id: string, isEntry: boolean): Promise<Module> {
     const module = new Module(id, isEntry);
 		this.modulesById.set(id, module);
     this.addModuleSource(id, '', module);
-		this.fetchStaticDependencies(module);
+		await this.fetchStaticDependencies(module);
+    return module;
   }
 
   /**
@@ -59,18 +61,21 @@ export class ModuleLoader {
    * static dependencies are the ones that we can resolve during build time
    * @param module 
    */
-  fetchStaticDependencies(module: Module) {
-    module.sources.forEach(source => {
-      this.fetchResolvedDependency(source, module.id);    
-    });
+  fetchStaticDependencies(module: Module): Promise<void> {
+    const dependencies = Array.from(module.sources, source => this.fetchResolvedDependency(source, module.id));
+    return Promise.all(dependencies).then(resolvedDependencies => {
+      module.dependencies = [...module.dependencies, ...resolvedDependencies];
+    })
   }
 
-  fetchResolvedDependency(id: string, importer: string) {
+  fetchResolvedDependency(id: string, importer: string): Promise<Module> {
     // External Modules: non-entry modules that start with neither '.' or '/' 
     // TODO:*
-    // Internal Modules
+    // Internal Modules:
     const dirname = path.dirname(importer);
     const absolutePath = path.join(dirname, id);
-    this.fetchModule(absolutePath, false)
+    return this.fetchModule(absolutePath, false)
+
+    // better to write a full node resolvers function that resolve relatively as well as absolutely from `node_modules/
   }
 }
